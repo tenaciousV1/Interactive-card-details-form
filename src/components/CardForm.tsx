@@ -1,21 +1,41 @@
 import { useState } from "react";
 import FormField from "./FormField";
-import { InputStatus } from "./FormField";
-import ExpDateField from "./ExpDateField";
+import TextInput, { TextInputState } from "./TextInput";
+import { useFormStore } from "../store";
 
 function CardForm() {
-  const [nameInputText, setNameInputText] = useState<string>("");
-  const [nameInputStatus, setNameInputStatus] = useState<InputStatus>(
-    InputStatus.NORMAL
+  const cardHolderName = useFormStore((state) => state.cardHolderName);
+  const cardNumber = useFormStore((state) => state.cardNumber);
+
+  const Cvc = useFormStore((state) => state.Cvc);
+
+  const setCardHolderName = useFormStore((state) => state.setCardHolderName);
+  const setCardNumber = useFormStore((state) => state.setCardNumber);
+  const setCvc = useFormStore((state) => state.setCvc);
+
+  const ExpirationMonth = useFormStore((state) => state.ExpirationMonth);
+  const ExpirationYear = useFormStore((state) => state.ExpirationYear);
+
+  const setExpirationMonth = useFormStore((state) => state.setExpirationMonth);
+  const setExpirationYear = useFormStore((state) => state.setExpirationYear);
+
+  const [nameInputStatus, setNameInputStatus] = useState<TextInputState>(
+    TextInputState.NORMAL
   );
 
-  const [cardNumberInputText, setCardNumberInputText] = useState<string>("");
   const [cardNumberInputStatus, setCardNumberInputStatus] =
-    useState<InputStatus>(InputStatus.NORMAL);
+    useState<TextInputState>(TextInputState.NORMAL);
 
-  const [cvcInputText, setCvcInputText] = useState<string>("");
-  const [cvcInputStatus, setCvcInputStatus] = useState<InputStatus>(
-    InputStatus.NORMAL
+  const [cvcInputStatus, setCvcInputStatus] = useState<TextInputState>(
+    TextInputState.NORMAL
+  );
+
+  const [monthState, setMonthState] = useState<TextInputState>(
+    TextInputState.NORMAL
+  );
+
+  const [yearState, setyearState] = useState<TextInputState>(
+    TextInputState.NORMAL
   );
 
   return (
@@ -34,50 +54,104 @@ function CardForm() {
             className="col-span-2"
             placeHolder="e.g Jane Appleseed"
             labelText="cardholder name"
-            contentText={nameInputText}
+            value={cardHolderName}
             invalidMessage="wrong format"
-            textChangeHandler={(e: any) => {
-              setNameInputText(e.target.value);
-              if (e.target.value === "") {
-                setNameInputStatus(InputStatus.ERROR);
-              } else setNameInputStatus(InputStatus.FOCUSED);
+            state={nameInputStatus}
+            onChange={(e) => {
+              setCardHolderName(e.target.value);
             }}
-            status={nameInputStatus}
-            setStatus={setNameInputStatus}
-          ></FormField>
+            onFocus={() => {
+              setNameInputStatus(TextInputState.FOCUSED);
+            }}
+            onBlur={() => {
+              if (nameInputStatus !== TextInputState.ERROR)
+                setNameInputStatus(TextInputState.NORMAL);
+            }}
+          />
+
           <FormField
             className="col-span-2"
             placeHolder="e.g. 1234 5678 9123 0000"
             labelText="card number"
-            contentText={cardNumberInputText}
+            value={cardNumber}
             invalidMessage="wrong format"
-            textChangeHandler={(e: any) => {
-              setCardNumberInputText(e.target.value);
-              if (e.target.value === "") {
-                setCardNumberInputStatus(InputStatus.ERROR);
-              } else setCardNumberInputStatus(InputStatus.FOCUSED);
+            state={cardNumberInputStatus}
+            onChange={(e) => {
+              setCardNumber(e.target.value);
             }}
-            status={cardNumberInputStatus}
-            setStatus={setCardNumberInputStatus}
-          ></FormField>
+            onFocus={() => {
+              if (cardNumberInputStatus !== TextInputState.ERROR)
+                setCardNumberInputStatus(TextInputState.FOCUSED);
+            }}
+            onBlur={() => {
+              if (cardNumberInputStatus !== TextInputState.ERROR)
+                setCardNumberInputStatus(TextInputState.NORMAL);
+            }}
+          />
 
-          <ExpDateField></ExpDateField>
+          <div className="col-span-1 grid max-w-[152px] gap-x-2 gap-y-[9px] xl:max-w-[170px] xl:gap-x-[10px]">
+            <p className="col-span-2 text-body-medium uppercase">
+              exp. date (mm/yy)
+            </p>
+
+            <TextInput
+              placeHolder="MM"
+              value={ExpirationMonth}
+              state={monthState}
+              onChange={(e: { target: { value: string } }) => {
+                setExpirationMonth(e.target.value);
+              }}
+              className="col-span-1 w-[72px]"
+              onFocus={() => {
+                setMonthState(TextInputState.FOCUSED);
+              }}
+              onBlur={() => {
+                setMonthState(TextInputState.NORMAL);
+              }}
+            ></TextInput>
+
+            <TextInput
+              placeHolder="YY"
+              value={ExpirationYear}
+              state={yearState}
+              onChange={(e: { target: { value: string } }) => {
+                setExpirationYear(e.target.value);
+              }}
+              className="col-span-1 w-[72px]"
+              onFocus={() => {
+                setyearState(TextInputState.FOCUSED);
+              }}
+              onBlur={() => {
+                setyearState(TextInputState.NORMAL);
+              }}
+            ></TextInput>
+            {(monthState === TextInputState.ERROR ||
+              yearState === TextInputState.ERROR) && (
+              <span className="col-span-2 -mt-[1px] hidden text-body-small text-red">
+                Cant be blank
+              </span>
+            )}
+          </div>
 
           <FormField
             className="col-span-1"
-            labelText="cvc"
             placeHolder="e.g. 123"
-            contentText={cvcInputText}
-            invalidMessage="Can't be blank"
-            textChangeHandler={(e: any) => {
-              setCvcInputText(e.target.value);
-              if (e.target.value === "") {
-                setCvcInputStatus(InputStatus.ERROR);
-              } else setCvcInputStatus(InputStatus.FOCUSED);
+            labelText="cvc"
+            value={Cvc}
+            invalidMessage="wrong format"
+            state={cvcInputStatus}
+            onChange={(e) => {
+              setCvc(e.target.value);
             }}
-            status={cvcInputStatus}
-            setStatus={setCvcInputStatus}
-          ></FormField>
+            onFocus={() => {
+              if (cvcInputStatus !== TextInputState.ERROR)
+                setCvcInputStatus(TextInputState.FOCUSED);
+            }}
+            onBlur={() => {
+              if (cvcInputStatus !== TextInputState.ERROR)
+                setCvcInputStatus(TextInputState.NORMAL);
+            }}
+          />
         </div>
         <button
           type="submit"
