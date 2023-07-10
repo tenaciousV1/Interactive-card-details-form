@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /*
+    ### Primary
+
+    - Linear gradient (active input border): hsl(249, 99%, 64%) to hsl(278, 94%, 30%)
+    - Red (input errors): hsl(0, 100%, 66%)
+    
+    ### Neutral
+    
+    - White: hsl(0, 0%, 100%)
+    - Light grayish violet: hsl(270, 3%, 87%)
+    - Dark grayish violet: hsl(279, 6%, 55%)
+    - Very dark violet: hsl(278, 68%, 11%)
+    */
+
+    /* Primary */
+    --red: 0deg 100% 66%;
+    /* gradient */
+    --gradient-blue: 249deg 99% 64%;
+    --gradient-violet: 278deg, 94%, 30%;
+
+    /* neutral */
+    --light-grayish-violet: 270deg, 3%, 87%;
+    --dark-grayish-violet: 279deg, 6%, 55%;
+    --very-dark-violet: 278deg, 68%, 11%;
+  }
+
+  body {
+    @apply h-screen;
+  }
+}
