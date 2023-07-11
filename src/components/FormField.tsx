@@ -18,6 +18,7 @@ function FormField({
   labelText,
   className,
   invalidMessage,
+  maxLength,
 }: FormFieldProps) {
   return (
     <div className={"grid gap-[9px] " + className}>
@@ -32,6 +33,7 @@ function FormField({
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
+        maxLength={maxLength}
       ></TextInput>
 
       {state === TextInputState.ERROR && (

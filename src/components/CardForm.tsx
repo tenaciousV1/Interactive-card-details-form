@@ -38,14 +38,59 @@ function CardForm() {
     TextInputState.NORMAL
   );
 
+  const [cardNumberInvalidMsg, setCardNumberInvalidMsg] =
+    useState<string>("Can't be blank");
+
+  const [ExpDateInvalidMsg, setExpDateInvalidMsg] =
+    useState<string>("Can't be blank");
+
+  const [CvcInvalidMsg, setCvcInvalidMsg] = useState<string>("Can't be blank");
+
   return (
     <>
       <form
-        onInvalid={(e) => {
-          e.preventDefault();
-        }}
         onSubmit={(e) => {
           e.preventDefault();
+          if (cardHolderName.length === 0)
+            setNameInputStatus(TextInputState.ERROR);
+
+          // dealing with errors on card number
+          let isCardNumberError = true;
+          if (cardNumber.length === 0)
+            setCardNumberInvalidMsg("Can't be blank");
+          else if (!cardNumber.match(/^(\d{4}\s)*\d{1,4}$/))
+            setCardNumberInvalidMsg("Wrong format, numbers only");
+          else if (cardNumber.length !== 19)
+            setCardNumberInvalidMsg("must be 16 characters long");
+          else isCardNumberError = false;
+
+          if (isCardNumberError) setCardNumberInputStatus(TextInputState.ERROR);
+
+          // dealing with errors on expiration date
+          if (!ExpirationMonth.match(/\d{2}/))
+            setMonthState(TextInputState.ERROR);
+
+          if (!ExpirationYear.match(/\d{2}/))
+            setyearState(TextInputState.ERROR);
+
+          if (ExpirationMonth.length === 0 || ExpirationYear.length === 0) {
+            setExpDateInvalidMsg("Can't be blank");
+          } else if (!`${ExpirationMonth}${ExpirationYear}`.match(/\d{4}/)) {
+            setExpDateInvalidMsg(
+              "Wrong format, must be in format MM/YY, numbers only"
+            );
+          }
+
+          // dealing with cvc errors
+          let isCvcError = true;
+          if (Cvc.length === 0) setCvcInvalidMsg("Can't be blank");
+          else if (Cvc.match(/\d*\D+\d*/))
+            setCvcInvalidMsg("Wrong format, numbers only");
+          else if (Cvc.length !== 3)
+            setCvcInvalidMsg("Must be three characters long");
+          else isCvcError = false;
+
+          if (isCvcError) setCvcInputStatus(TextInputState.ERROR);
         }}
         className="mt-[91px] grid gap-7 px-6 xl:ml-[400px] xl:mt-0 xl:gap-10 xl:px-0"
       >
@@ -55,7 +100,7 @@ function CardForm() {
             placeHolder="e.g Jane Appleseed"
             labelText="cardholder name"
             value={cardHolderName}
-            invalidMessage="wrong format"
+            invalidMessage="Can't be blank"
             state={nameInputStatus}
             onChange={(e) => {
               setCardHolderName(e.target.value);
@@ -64,8 +109,7 @@ function CardForm() {
               setNameInputStatus(TextInputState.FOCUSED);
             }}
             onBlur={() => {
-              if (nameInputStatus !== TextInputState.ERROR)
-                setNameInputStatus(TextInputState.NORMAL);
+              setNameInputStatus(TextInputState.NORMAL);
             }}
           />
 
@@ -74,19 +118,29 @@ function CardForm() {
             placeHolder="e.g. 1234 5678 9123 0000"
             labelText="card number"
             value={cardNumber}
-            invalidMessage="wrong format"
+            invalidMessage={cardNumberInvalidMsg}
             state={cardNumberInputStatus}
             onChange={(e) => {
-              setCardNumber(e.target.value);
+              const newValue: string = e.target.value;
+              if (
+                newValue.length % 5 === 0 &&
+                newValue.slice(-1) !== " " &&
+                newValue.length > cardNumber.length
+              )
+                setCardNumber(
+                  newValue.substring(0, newValue.length - 1) +
+                    " " +
+                    newValue.slice(-1)
+                );
+              else setCardNumber(newValue);
             }}
             onFocus={() => {
-              if (cardNumberInputStatus !== TextInputState.ERROR)
-                setCardNumberInputStatus(TextInputState.FOCUSED);
+              setCardNumberInputStatus(TextInputState.FOCUSED);
             }}
             onBlur={() => {
-              if (cardNumberInputStatus !== TextInputState.ERROR)
-                setCardNumberInputStatus(TextInputState.NORMAL);
+              setCardNumberInputStatus(TextInputState.NORMAL);
             }}
+            maxLength={19}
           />
 
           <div className="col-span-1 grid max-w-[152px] gap-x-2 gap-y-[9px] xl:max-w-[170px] xl:gap-x-[10px]">
@@ -108,6 +162,7 @@ function CardForm() {
               onBlur={() => {
                 setMonthState(TextInputState.NORMAL);
               }}
+              maxLength={2}
             ></TextInput>
 
             <TextInput
@@ -124,11 +179,12 @@ function CardForm() {
               onBlur={() => {
                 setyearState(TextInputState.NORMAL);
               }}
+              maxLength={2}
             ></TextInput>
             {(monthState === TextInputState.ERROR ||
               yearState === TextInputState.ERROR) && (
-              <span className="col-span-2 -mt-[1px] hidden text-body-small text-red">
-                Cant be blank
+              <span className="col-span-2 -mt-[1px] text-body-small text-red">
+                {ExpDateInvalidMsg}
               </span>
             )}
           </div>
@@ -138,19 +194,18 @@ function CardForm() {
             placeHolder="e.g. 123"
             labelText="cvc"
             value={Cvc}
-            invalidMessage="wrong format"
+            invalidMessage={CvcInvalidMsg}
             state={cvcInputStatus}
             onChange={(e) => {
               setCvc(e.target.value);
             }}
             onFocus={() => {
-              if (cvcInputStatus !== TextInputState.ERROR)
-                setCvcInputStatus(TextInputState.FOCUSED);
+              setCvcInputStatus(TextInputState.FOCUSED);
             }}
             onBlur={() => {
-              if (cvcInputStatus !== TextInputState.ERROR)
-                setCvcInputStatus(TextInputState.NORMAL);
+              setCvcInputStatus(TextInputState.NORMAL);
             }}
+            maxLength={3}
           />
         </div>
         <button

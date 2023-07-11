@@ -12,6 +12,7 @@ export type TextInputProps = {
   onFocus?: () => void;
   onBlur?: () => void;
   className?: string;
+  maxLength?: number;
 };
 
 function TextInput({
@@ -22,6 +23,7 @@ function TextInput({
   onFocus,
   onBlur,
   className,
+  maxLength,
 }: TextInputProps) {
   const borderColorVariants = {
     normal: "bg-light-grayish-violet",
@@ -48,6 +50,7 @@ function TextInput({
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
+        maxLength={maxLength}
       />
     </div>
   );
