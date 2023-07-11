@@ -1,6 +1,8 @@
+import { useState } from "react";
 import cardLogo from "./assets/images/card-logo.svg";
 import CardForm from "./components/CardForm";
 import { useFormStore } from "./store";
+import CompletedMessage from "./components/CompletedMessage";
 
 function App() {
   const cardHolderName = useFormStore((state) => state.cardHolderName);
@@ -8,6 +10,8 @@ function App() {
   const Cvc = useFormStore((state) => state.Cvc);
   const ExpirationMonth = useFormStore((state) => state.ExpirationMonth);
   const ExpirationYear = useFormStore((state) => state.ExpirationYear);
+
+  const [isCompleted, setIsCompleted] = useState(false);
 
   return (
     <>
@@ -44,7 +48,10 @@ function App() {
             </div>
           </div>
         </div>
-        <CardForm />
+        {!isCompleted && <CardForm setIsCompleted={setIsCompleted} />}
+        {isCompleted && (
+          <CompletedMessage setIsCompleted={setIsCompleted}></CompletedMessage>
+        )}
       </main>
     </>
   );

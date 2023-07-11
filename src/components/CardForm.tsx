@@ -3,7 +3,7 @@ import FormField from "./FormField";
 import TextInput, { TextInputState } from "./TextInput";
 import { useFormStore } from "../store";
 
-function CardForm() {
+function CardForm({ setIsCompleted }) {
   const cardHolderName = useFormStore((state) => state.cardHolderName);
   const cardNumber = useFormStore((state) => state.cardNumber);
 
@@ -91,6 +91,14 @@ function CardForm() {
           else isCvcError = false;
 
           if (isCvcError) setCvcInputStatus(TextInputState.ERROR);
+
+          if (
+            cardHolderName.length !== 0 &&
+            !isCardNumberError &&
+            !isCvcError &&
+            `${ExpirationMonth}${ExpirationYear}`.match(/\d{4}/)
+          )
+            setIsCompleted(true);
         }}
         className="mt-[91px] grid gap-7 px-6 xl:ml-[400px] xl:mt-0 xl:gap-10 xl:px-0"
       >
