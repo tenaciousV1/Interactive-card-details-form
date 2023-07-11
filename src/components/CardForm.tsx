@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FormField from "./FormField";
 import TextInput, { TextInputState } from "./TextInput";
 import { useFormStore } from "../store";
@@ -45,6 +45,8 @@ function CardForm({ setIsCompleted }) {
     useState<string>("Can't be blank");
 
   const [CvcInvalidMsg, setCvcInvalidMsg] = useState<string>("Can't be blank");
+
+  const inputRef = useRef<HTMLInputElement>(null); // create ref for the input field
 
   return (
     <>
@@ -128,9 +130,28 @@ function CardForm({ setIsCompleted }) {
             value={cardNumber}
             invalidMessage={cardNumberInvalidMsg}
             state={cardNumberInputStatus}
-            onChange={(e) => {
-              const noSpaces: string = e.target.value.replace(/\s/g, "");
-              setCardNumber(noSpaces.replace(/(.{4})/g, "$1 ").trim());
+            ref={inputRef}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const { selectionStart, value } = e.target;
+              const noSpaces = value.replace(/\s/g, "");
+              const formatted = noSpaces.replace(/(.{4})/g, "$1 ").trim();
+
+              // Save cursor position
+              let cursorPosition = selectionStart;
+              for (let i = 0; i < cursorPosition; i++) {
+                if (value[i] !== formatted[i]) cursorPosition++;
+              }
+
+              setCardNumber(formatted);
+
+              // Set the cursor position after React re-renders the component
+              requestAnimationFrame(() => {
+                if (inputRef.current)
+                  inputRef.current.setSelectionRange(
+                    cursorPosition,
+                    cursorPosition
+                  );
+              });
             }}
             onFocus={() => {
               setCardNumberInputStatus(TextInputState.FOCUSED);
