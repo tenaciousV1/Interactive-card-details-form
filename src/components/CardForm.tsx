@@ -133,13 +133,22 @@ function CardForm({ setIsCompleted }) {
             ref={inputRef}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { selectionStart, value } = e.target;
+
+              let cursorPositionNoSpaces = 0;
+              for (let i = 0; i < selectionStart; ++i) {
+                if (value[i] !== " ") cursorPositionNoSpaces++;
+              }
+
               const noSpaces = value.replace(/\s/g, "");
               const formatted = noSpaces.replace(/(.{4})/g, "$1 ").trim();
 
-              // Save cursor position
-              let cursorPosition = selectionStart;
-              for (let i = 0; i < cursorPosition; i++) {
-                if (value[i] !== formatted[i]) cursorPosition++;
+              let cursorPositionFormatted = 0;
+              for (
+                let j = 0;
+                j < cursorPositionNoSpaces;
+                ++cursorPositionFormatted
+              ) {
+                if (formatted[cursorPositionFormatted] !== " ") j++;
               }
 
               setCardNumber(formatted);
@@ -148,8 +157,8 @@ function CardForm({ setIsCompleted }) {
               requestAnimationFrame(() => {
                 if (inputRef.current)
                   inputRef.current.setSelectionRange(
-                    cursorPosition,
-                    cursorPosition
+                    cursorPositionFormatted,
+                    cursorPositionFormatted
                   );
               });
             }}
