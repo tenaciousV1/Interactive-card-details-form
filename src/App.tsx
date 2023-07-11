@@ -28,7 +28,7 @@ function App() {
           <div className="absolute bottom-0 left-0 h-[157px] w-[286px] bg-card-front bg-cover pl-5 text-white xl:bottom-auto xl:top-0 xl:h-[245px] xl:w-[447px] xl:pl-8">
             <img
               src={cardLogo}
-              className="xl:[64px] mb-[37px] mt-[18px] h-[30px] xl:mt-7 xl:h-[47px]"
+              className="mb-[37px] mt-[18px] h-[30px] xl:mt-7 xl:h-[47px]"
             />
             <p className="mb-[17px] text-heading-large uppercase tracking-[2.2px] xl:mb-[25px] xl:text-heading-xl">
               {cardNumber.length !== 0 && cardNumber}

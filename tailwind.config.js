@@ -49,6 +49,7 @@ export default {
         "light-grayish-violet": "hsl(var(--light-grayish-violet))",
         "dark-grayish-violet": "hsl(var(--dark-grayish-violet))",
         "very-dark-violet": "hsl(var(--very-dark-violet))",
+        "purplish-grey": "#8F8694",
       },
       backgroundImage: {
         "main-mobile": "url('./assets/images/bg-main-mobile.png')",

@@ -129,18 +129,8 @@ function CardForm({ setIsCompleted }) {
             invalidMessage={cardNumberInvalidMsg}
             state={cardNumberInputStatus}
             onChange={(e) => {
-              const newValue: string = e.target.value;
-              if (
-                newValue.length % 5 === 0 &&
-                newValue.slice(-1) !== " " &&
-                newValue.length > cardNumber.length
-              )
-                setCardNumber(
-                  newValue.substring(0, newValue.length - 1) +
-                    " " +
-                    newValue.slice(-1)
-                );
-              else setCardNumber(newValue);
+              const noSpaces: string = e.target.value.replace(/\s/g, "");
+              setCardNumber(noSpaces.replace(/(.{4})/g, "$1 ").trim());
             }}
             onFocus={() => {
               setCardNumberInputStatus(TextInputState.FOCUSED);
