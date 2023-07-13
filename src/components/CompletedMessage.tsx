@@ -1,7 +1,11 @@
 import { useFormStore } from "../store";
 import iconComplete from "../assets/images/icon-complete.svg";
 
-function CompletedMessage({ setIsCompleted }) {
+type Props = {
+  setIsCompleted: (newValue: boolean) => void;
+};
+
+function CompletedMessage({ setIsCompleted }: Props) {
   const restoreDefaultValues = useFormStore(
     (state) => state.restoreDefaultValues
   );

@@ -3,7 +3,11 @@ import FormField from "./FormField";
 import TextInput, { TextInputState } from "./TextInput";
 import { useFormStore } from "../store";
 
-function CardForm({ setIsCompleted }) {
+type Props = {
+  setIsCompleted: (newValue: boolean) => void;
+};
+
+function CardForm({ setIsCompleted }: Props) {
   const cardHolderName = useFormStore((state) => state.cardHolderName);
   const cardNumber = useFormStore((state) => state.cardNumber);
 
@@ -131,8 +135,10 @@ function CardForm({ setIsCompleted }) {
             invalidMessage={cardNumberInvalidMsg}
             state={cardNumberInputStatus}
             ref={inputRef}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange={(e) => {
               const { selectionStart, value } = e.target;
+
+              if (selectionStart === null) return;
 
               let cursorPositionNoSpaces = 0;
               for (let i = 0; i < selectionStart; ++i) {
@@ -197,7 +203,7 @@ function CardForm({ setIsCompleted }) {
               placeHolder="YY"
               value={ExpirationYear}
               state={yearState}
-              onChange={(e: { target: { value: string } }) => {
+              onChange={(e) => {
                 setExpirationYear(e.target.value);
               }}
               className="col-span-1 w-[72px]"

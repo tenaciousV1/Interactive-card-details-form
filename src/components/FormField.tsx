@@ -1,4 +1,4 @@
-import React, { RefObject } from "react";
+import React, { ForwardedRef, RefObject } from "react";
 import TextInput from "./TextInput";
 import { TextInputState } from "./TextInput";
 import { TextInputProps } from "./TextInput";
@@ -23,7 +23,7 @@ const FormField = React.forwardRef(
       invalidMessage,
       maxLength,
     }: FormFieldProps,
-    ref: RefObject<HTMLInputElement>
+    ref?: ForwardedRef<HTMLInputElement>
   ) => {
     return (
       <div className={"grid gap-[9px] " + className}>

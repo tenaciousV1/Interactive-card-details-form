@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 // Define the shape of your store
-type Store = {
+export type FormState = {
   cardHolderName: string;
   cardNumber: string;
   ExpirationMonth: string;
@@ -16,7 +16,7 @@ type Store = {
 };
 
 // Define your store
-export const useFormStore = create<Store>((set) => ({
+export const useFormStore = create<FormState>((set) => ({
   cardHolderName: "",
   cardNumber: "",
   ExpirationMonth: "",
