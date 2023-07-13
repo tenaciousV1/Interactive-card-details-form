@@ -30,12 +30,12 @@ function App() {
               src={cardLogo}
               className="mb-[37px] mt-[18px] h-[30px] xl:mt-7 xl:h-[47px]"
             />
-            <p className="mb-[17px] text-heading-large uppercase tracking-[2.2px] xl:mb-[25px] xl:text-heading-xl">
+            <p className="mb-[17px] overflow-x-hidden whitespace-nowrap text-heading-large uppercase tracking-[2.2px] xl:mb-[25px] xl:text-heading-xl">
               {cardNumber.length !== 0 && cardNumber}
               {cardNumber.length === 0 && "0000 0000 0000 0000"}
             </p>
-            <div className="mr-[21px] flex justify-between text-body-xs xl:mr-8 xl:text-body-large">
-              <p className="uppercase">
+            <div className="] mr-[21px]  flex justify-between text-body-xs xl:mr-8 xl:text-body-large">
+              <p className="max-w-[22em] overflow-x-hidden uppercase">
                 {cardHolderName.length !== 0 && cardHolderName}
                 {cardHolderName.length === 0 && "Jane Appleseed"}
               </p>
