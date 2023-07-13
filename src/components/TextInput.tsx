@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 
 export enum TextInputState {
   NORMAL = "normal",
@@ -29,7 +29,7 @@ const TextInput = React.forwardRef(
       className,
       maxLength,
     }: TextInputProps,
-    ref
+    ref: RefObject<HTMLInputElement>
   ) => {
     const borderColorVariants = {
       normal: "bg-light-grayish-violet",
