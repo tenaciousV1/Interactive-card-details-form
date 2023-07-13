@@ -1,4 +1,4 @@
-import React, { ForwardedRef, RefObject } from "react";
+import React, { ForwardedRef } from "react";
 import TextInput from "./TextInput";
 import { TextInputState } from "./TextInput";
 import { TextInputProps } from "./TextInput";

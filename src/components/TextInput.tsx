@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ForwardedRef, RefObject } from "react";
+import React, { ChangeEvent, ForwardedRef } from "react";
 
 export enum TextInputState {
   NORMAL = "normal",
