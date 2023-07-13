@@ -1,9 +1,12 @@
 {
+  "homepage": "https://tenaciousv1.github.io/interactive-card-details-form/",
   "name": "interactive-card-details-form",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
